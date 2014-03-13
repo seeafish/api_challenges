@@ -12,17 +12,16 @@ if (empty($arguments)) {
     exit(1);
 } else {
     if (isset($arguments["i"])) {
-        echo "\n\n ---- Available images ----\n";
         printImages($cloud);
     }
     if (isset($arguments["f"])) {
-        echo "\n\n ---- Available flavours ----\n";
         printFlavours($cloud);
     }
 }
 
 function printImages($cloud) {
     // print a list of image names and associated IDs
+    echo "\n\n ---- Available images ----\n";
     $cs = $cloud->computeService('cloudServersOpenStack', 'LON');
     $imagelist = $cs->imageList();
     while ($image = $imagelist->next()) {
@@ -32,6 +31,7 @@ function printImages($cloud) {
 
 function printFlavours($cloud) {
     // print a list of flavours and associated IDs
+    echo "\n\n ---- Available flavours ----\n";
     $cs = $cloud->computeService('cloudServersOpenStack', 'LON');
     $flavourlist = $cs->flavorList();
     while ($flavour = $flavourlist->next()) {

@@ -1,15 +1,8 @@
 <?php
 
-include 'credentials.php';
-require 'vendor/autoload.php';
-
-use OpenCloud\Rackspace;
-
-// using US_IDENTITY_ENDPOINT since it's global anyway...
-$cloud = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
-    'username' => getenv('username'),
-    'apiKey'   => getenv('apiKey')
-));
+include 'auth.php';
 
 $cs = $cloud->computeService('cloudServersOpenStack', 'LON');
-var_dump($cs->imageList());
+
+// Use: 13.10 = 5a8759da-dca8-40ce-86fa-fa029a58a999, flavour = 2
+// tbc................
