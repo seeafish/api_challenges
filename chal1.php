@@ -57,7 +57,7 @@ $srv = $cs->server();
 foreach ($srv_details as $server) {
     try {
         $srv->create($server);
-		sleep(3);
+        sleep(3);
         echo "Details for $server[name]:\n" .
         "PublicIP\t\tPassword\n" .
         $srv->ip() . "\t\t$srv->adminPass\n";
