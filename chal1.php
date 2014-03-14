@@ -30,25 +30,9 @@ if (empty($arguments)) {
 // be able to customise the image/flavour
 $cs = $cloud->computeService('cloudServersOpenStack', 'LON');
 
-// get images and flavours
-$images = $cs->imageList();
-$flavours = $cs->flavorList();
-
-// as much I hate this, loop through and find the objects required
-while ($image = $images->next()) {
-	if (strpos($image->id, 'bbb6b40f-fc70-4e7e-ab63-42b4a0d47997') !== false) {
-        $build_image = $image;
-        break;
-    }
-}
-
-$flavours = $cs->flavorList();
-while ($flavour = $flavours->next()) {
-	if (strpos($flavour->name, '512MB Standard Instance') !== false) {
-		$build_flavour = $flavour;
-		break;
-	}
-}
+// get images and flavours - hardcoded for now
+$build_image = $cs->image('bbb6b40f-fc70-4e7e-ab63-42b4a0d47997');
+$build_flavour = $cs->flavor('2');
 
 // populate array of servers to build
 echo "Creating $num $build_image->name $build_flavour->name servers named\n";
@@ -73,6 +57,10 @@ $srv = $cs->server();
 foreach ($srv_details as $server) {
     try {
         $srv->create($server);
+		sleep(3);
+        echo "Details for $server[name]:\n" .
+        "PublicIP\t\tPassword\n" .
+        $srv->ip() . "\t\t$srv->adminPass\n";
     } catch (\Guzzle\Http\Exception\BadResponseException $e) {
         $responseBody = (string) $e->getResponse()->getBody();
         $statusCode = $e->getResponse()->getStatusCode();
@@ -80,3 +68,4 @@ foreach ($srv_details as $server) {
         echo sprintf("Status: %s\nBody: %s\nHeaders: %s", $statusCode, $responseBody, implode(', ', $headers));
     }
 }
+
