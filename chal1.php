@@ -3,11 +3,12 @@
 include 'auth.php';
 
 use OpenCloud\Compute\Constants\Network;
+use OpenCloud\Compute\Constants\ServerState;
 
 // get arg list
 $arguments = getopt("h:n::");
 if (empty($arguments)) {
-    echo "Usage: chal1.php -h [-n]:\n" .
+    echo "Usage: chal1.php -h [-n] (no spaces):\n" .
     "\t-h:\tHostname of servers\n" .
     "\t-n:\tNumber of servers to create (default: 3)\n";
     exit(1);
@@ -51,13 +52,22 @@ for ($i = 1; $i <= $num; $i++) {
     );
 }
 
+// callback stuff - don't want any output as it's annoying
+$callback = function($srv) {
+    if (!empty($srv->error)) {
+        var_dump($srv->error);
+        exit(1);
+    }
+};
+
 // instantiate the $srv object for creation and polling
 $srv = $cs->server();
 
 foreach ($srv_details as $server) {
     try {
         $srv->create($server);
-        sleep(3);
+        echo "Waiting on $srv->name to finish building...\n";
+        $srv->waitFor(ServerState::ACTIVE, 600, $callback);
         echo "Details for $server[name]:\n" .
         "PublicIP\t\tPassword\n" .
         $srv->ip() . "\t\t$srv->adminPass\n";
@@ -68,4 +78,3 @@ foreach ($srv_details as $server) {
         echo sprintf("Status: %s\nBody: %s\nHeaders: %s", $statusCode, $responseBody, implode(', ', $headers));
     }
 }
-
