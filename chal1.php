@@ -8,22 +8,16 @@ use OpenCloud\Compute\Constants\ServerState;
 // get arg list
 $arguments = getopt("h:n::");
 if (empty($arguments)) {
-    echo "Usage: chal1.php -h [-n] (no spaces):\n" .
+    echo "Usage: chal1.php -h [-n<num>]:\n" .
     "\t-h:\tHostname of servers\n" .
-    "\t-n:\tNumber of servers to create (default: 3)\n";
+    "\t-n<num>:\tNumber of servers to create (default: 3)\n";
     exit(1);
 } else {
-    if (!empty($arguments["h"])) {
-        $hostname = $arguments["h"];
-    } else {
-        echo "Please enter a hostname\n";
-        exit(1);
-    }
-
-    if (!empty($arguments["n"])) {
-        $num = $arguments["n"];
-    } else {
+    $hostname = $arguments["h"];
+    if (empty($arguments["n"])) {
         $num = 3;
+    } else {
+        $num = $arguments["n"];
     }
 }
 
