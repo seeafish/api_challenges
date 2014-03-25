@@ -32,8 +32,8 @@ if (empty($arguments)) {
 $cs = $cloud->computeService('cloudServersOpenStack', 'LON');
 
 // get images and flavours - hardcoded for now
-$build_image = $cs->image('bbb6b40f-fc70-4e7e-ab63-42b4a0d47997');
-$build_flavour = $cs->flavor('2');
+$build_image = $cs->image('9c1d8506-ffcd-4218-80cb-e8a2a0470131');
+$build_flavour = $cs->flavor('performance1-1');
 
 // populate array of servers to build
 echo "Creating $num $build_image->name $build_flavour->name servers named\n";
