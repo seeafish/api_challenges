@@ -29,16 +29,16 @@ if (empty($arguments)) {
     }
 }
 
-// store files in an array
-$i = 0;
 if (!is_dir($dir_name)) {
-    echo "Invalid directory!\n";
+    echo "Invalid directory specified!\n";
     exit(1);
 } elseif ($dh = opendir($dir_name)) {
     // sanitise last slash
     if (substr($dir_name, -1) == "/") {
         $dir_name = substr($dir_name, 0, -1);
     }
+    // store files in an array
+    $i = 0;
     while (($file = readdir($dh)) !== false) {
         if ($file == '.' || $file == '..') {
             continue;
@@ -50,6 +50,18 @@ if (!is_dir($dir_name)) {
     closedir($dh);
 }
 
-$container = $cf->getContainer($cont_name);
+// check to see if desired container exists
+$containerlist = $cf->listContainers();
+while ($container = $containerlist->next()) {
+    if ($container->name == $cont_name) {
+        break;
+    }
+}
+
+if(!$container) {
+    echo "Container $cont_name not found, creating it...\n";
+    $container = $cf->createContainer($cont_name);
+}
+
 echo "Uploading files from $dir_name into container $cont_name...\n";
 $container->uploadObjects($objects);
