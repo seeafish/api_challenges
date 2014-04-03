@@ -6,14 +6,14 @@ use OpenCloud\ObjectStore\Resource\DataObject;
 
 $cf = $cloud->objectStoreService('cloudFiles', 'LON');
 
-$arguments = getopt("n:");
+$arguments = getopt("c:");
 
 if (empty($arguments)) {
-    echo "Usage: php chal6.php -n <name>:\n" .
-    "\t-n: name of CDN container to create\n";
+    echo "Usage: php chal6.php -c <container>:\n" .
+    "\t-c: name of CDN container to create\n";
     exit(1);
 } else {
-    $cont_name = $arguments["n"];
+    $cont_name = $arguments["c"];
 }
 
 echo "Creating container $cont_name...\n";
